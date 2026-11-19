@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Friendsgiving Potluck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+:root {
+  --page: #D4E8F8;
+  --grain: rgba(63, 101, 144, .05);
+  --card: #FBF5E8;
+  --ink: #2F5478;
+  --ink-soft: #5F7F9F;
+  --on-ink: #FBF5E8;
+  --accent: #B4501E;
+  --on-accent: #FBF5E8;
+  --ribbon: #7E9EC1;
+  --ribbon-edge: #3F6590;
+  --line: #C9CFD3;
+  --field: rgba(255, 255, 255, .6);
+  --shadow: 0 18px 40px rgba(47, 84, 120, .22);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--page);
+  background-image:
+    repeating-linear-gradient(0deg, var(--grain) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, var(--grain) 0 1px, transparent 1px 4px);
+  color: var(--ink);
+  font-family: "Jost", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.card {
+  position: relative;
+  max-width: 520px;
+  margin: 28px auto;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  padding-bottom: 44px;
+  overflow: hidden;
+}
+@media (max-width: 560px) { .card { margin: 14px; } }
+
+/* ---------- header ---------- */
+.head { position: relative; padding: 17% 12% 0; text-align: center; }
+.ribbon { position: absolute; top: 0; left: 0; width: 100%; height: auto; pointer-events: none; }
+.rb-fill { fill: var(--ribbon); }
+.rb-edge { stroke: var(--ribbon-edge); }
+.rb-line { fill: none; stroke-linecap: butt; }
+.eyebrow {
+  position: relative; margin: 0;
+  font-weight: 500;
+  font-size: clamp(10px, 2.7vw, 13px);
+  letter-spacing: .2em; line-height: 1.9;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.title {
+  position: relative; margin: 6px 0 0;
+  font-family: "Bodoni Moda", "Didot", "Bodoni 72", "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(44px, 14.2vw, 80px);
+  line-height: 1; letter-spacing: -.01em;
+  color: var(--ink);
+}
+.title span { display: inline-block; transform: scaleY(1.14); transform-origin: 50% 70%; }
+.script {
+  position: relative; z-index: 2; display: block;
+  margin: -.2em 0 0;
+  font-family: "Mrs Saint Delafield", "Snell Roundhand", "Brush Script MT", cursive;
+  font-weight: 400;
+  font-size: clamp(64px, 19vw, 108px);
+  line-height: .9;
+  color: var(--accent);
+  transform: rotate(-4deg);
+}
+
+/* ---------- date ---------- */
+.body { padding: 0 12%; }
+.date { display: flex; align-items: center; gap: 10px; margin: 18px 0 0; }
+.date .ln { flex: 1; height: 1px; background: var(--ink); opacity: .45; }
+.date .mo, .date .yr, .date .dy { font-weight: 500; font-size: 11px; letter-spacing: .16em; line-height: 1; color: var(--accent); }
+.dow { margin: 5px 0 0; text-align: center; font-size: 11px; letter-spacing: .12em; color: var(--ink-soft); }
+.resetwrap { margin: 36px 0 0; text-align: center; }
+.resetwrap .linkbtn { font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+
+/* ---------- sections ---------- */
+.rule {
+  display: flex; align-items: center; gap: 14px;
+  margin: 30px 0 18px;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-weight: 500; font-size: 22px;
+  color: var(--ink);
+  text-align: center;
+}
+.rule::before, .rule::after { content: ""; flex: 1; height: 1px; background: var(--ink); opacity: .45; }
+
+.step {
+  display: block; margin: 0 0 10px;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-weight: 500; font-size: 18px;
+  color: var(--ink);
+}
+.field { margin-bottom: 24px; }
+
+.input {
+  width: 100%;
+  background: var(--field);
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: var(--ink);
+}
+.input::placeholder { color: var(--ink-soft); opacity: .75; }
+.input:disabled { opacity: 1; background: transparent; border-style: dashed; }
+.select {
+  appearance: none; -webkit-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+    linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+.select:disabled { cursor: default; }
+.select option { color: #2F5478; background: #FBF5E8; }
+
+.item { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px dashed var(--line); }
+.item:last-of-type { border-bottom: 0; }
+.itemline { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+.itemline .select { flex: 1; }
+.diets { margin-top: 10px; }
+.dlabel { display: block; margin-bottom: 6px; font-size: 13px; color: var(--ink-soft); }
+.dchips { display: flex; flex-wrap: nowrap; gap: 6px; }
+.dtag {
+  appearance: none; background: transparent;
+  border: 1px solid var(--ink-soft); color: var(--ink);
+  border-radius: 999px; padding: 3px 10px;
+  font-size: 12.5px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+@media (max-width: 360px) { .dchips { gap: 4px; } .dtag { padding: 3px 7px; font-size: 11px; } }
+.dtag.on { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.dtag-vegan { border-color: #7FB36F; }
+.dtag-vegetarian { border-color: #B7C453; }
+.dtag-gf { border-color: #B58BCB; }
+.tg, .dtag-vegan.on, .dtag-vegetarian.on, .dtag-gf.on { font-weight: 600; }
+.tg-vegan, .dtag-vegan.on { background: #DDEFD9; border-color: #7FB36F; color: #24592F; }
+.tg-vegetarian, .dtag-vegetarian.on { background: #EEF2C3; border-color: #B7C453; color: #55610F; }
+.tg-gf, .dtag-gf.on { background: #EBDDF3; border-color: #B58BCB; color: #5E3478; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.tg {
+  border: 1px solid var(--ink-soft); color: var(--ink);
+  border-radius: 999px; padding: 0 9px;
+  font-size: 11px; line-height: 18px; white-space: nowrap;
+}
+
+.linkbtn {
+  appearance: none; background: none; border: 0; padding: 2px 0;
+  font-weight: 500; font-size: 15px;
+  text-decoration: underline; text-underline-offset: 3px;
+  cursor: pointer; color: var(--ink);
+}
+.linkbtn.warn { color: var(--accent); }
+.addbtn { margin-top: 4px; color: var(--accent); }
+
+.go {
+  appearance: none; width: 100%; border: 0; border-radius: 999px;
+  background: var(--ink); color: var(--on-ink);
+  padding: 15px 20px;
+  font-weight: 600; font-size: 16px; letter-spacing: .06em;
+  cursor: pointer; transition: opacity .15s ease;
+}
+.go:hover:not(:disabled) { opacity: .88; }
+.go:disabled { opacity: .5; cursor: wait; }
+
+.msg { min-height: 1.5em; margin: 12px 0 0; font-size: 15px; text-align: center; color: var(--ink); }
+.msg.err { color: var(--accent); font-weight: 500; }
+
+.editbar {
+  display: none; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  gap: 8px 16px; margin: 0 0 22px; padding: 12px 14px;
+  border: 1.5px dashed var(--accent); border-radius: 10px; font-size: 15px;
+}
+.editbar.show { display: flex; }
+.editbar .acts { display: flex; gap: 16px; }
+
+.note {
+  margin: 0 0 8px; padding: 14px 16px;
+  border: 1.5px dashed var(--ink-soft); border-radius: 10px;
+  font-size: 15px; text-align: center;
+}
+
+.mine {
+  margin: 0 0 8px; padding: 16px;
+  border: 1.5px solid var(--ink); border-radius: 10px;
+  text-align: center;
+}
+.mine p { margin: 0 0 6px; font-size: 16px; }
+.mine strong { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 600; font-size: 19px; color: var(--accent); }
+
+/* ---------- menu ---------- */
+.summary { margin: 0 0 6px; font-size: 15px; text-align: center; }
+.summary p { margin: 0 0 4px; }
+.summary .need { color: var(--accent); font-weight: 500; }
+.menucard {
+  margin: 4px -5% 0;
+  padding: 26px 22px 10px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: inset 0 0 0 5px var(--card), inset 0 0 0 6.5px var(--ink);
+}
+@media (max-width: 420px) { .menucard { padding: 22px 16px 8px; } }
+.mtitle {
+  margin: 0; text-align: center;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-weight: 600; font-size: 30px; line-height: 1.1; letter-spacing: .02em;
+  color: var(--ink);
+}
+.orn { margin: 8px 0 16px; text-align: center; font-size: 14px; letter-spacing: .6em; text-indent: .6em; color: var(--accent); }
+.groups { list-style: none; margin: 0; padding: 0; }
+.group { margin: 0 0 22px; }
+.gh {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin: 0 0 8px;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-style: italic; font-weight: 500; font-size: 21px; line-height: 1.2;
+  color: var(--accent);
+}
+.gh::before, .gh::after { content: ""; flex: 1; height: 1px; background: var(--ink); opacity: .4; }
+.dishes { list-style: none; margin: 0; padding: 0; }
+.dishrow { padding: 7px 0; }
+.dline { display: flex; align-items: flex-end; gap: 8px; }
+.dish {
+  flex: 0 1 auto;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-weight: 500; font-size: 17px; line-height: 1.3;
+  overflow-wrap: anywhere; color: var(--ink);
+}
+.leader { flex: 1 1 14px; min-width: 14px; margin-bottom: 5px; border-bottom: 2px dotted var(--ink-soft); opacity: .55; }
+.by {
+  flex: none;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif;
+  font-style: italic; font-weight: 500; font-size: 16px; line-height: 1.3;
+  color: var(--accent); white-space: nowrap;
+}
+.empty { text-align: center; padding: 14px 0; color: var(--ink-soft); }
+.editlist { margin: 6px 0 0; font-size: 14px; text-align: center; color: var(--ink-soft); }
+.editlist .linkbtn { font-size: 14px; margin: 0 6px; color: var(--ink); }
+
+.hint { margin: 0 0 18px; font-size: 15px; text-align: center; color: var(--ink-soft); }
+.preview {
+  margin: 22px 0 0; padding: 18px 16px 16px;
+  border: 1.5px solid var(--ink); border-radius: 10px;
+}
+.pv-title {
+  margin: 0 0 10px; text-align: center;
+  font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 600; font-size: 20px; color: var(--ink);
+}
+.preview textarea { resize: vertical; min-height: 120px; line-height: 1.5; font-size: 15px; }
+.pv-actions { display: flex; gap: 10px; margin-top: 12px; }
+.pv-actions .go { flex: 1; width: auto; padding: 13px 12px; }
+.go.alt { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.pv-note { margin: 12px 0 0; font-size: 14px; text-align: center; color: var(--ink-soft); }
+.copied { min-height: 1.3em; margin: 8px 0 0; text-align: center; font-size: 14px; color: var(--accent); font-weight: 500; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="card">
+
+  <header class="head">
+    <svg class="ribbon" viewBox="0 0 500 340" aria-hidden="true">
+      <g>
+        <path class="rb-line rb-edge" stroke-width="17" d="M236 52 C150 66 52 40 30 130 C16 190 44 240 28 318"/>
+        <path class="rb-line" style="stroke:var(--ribbon)" stroke-width="12" d="M236 52 C150 66 52 40 30 130 C16 190 44 240 28 318"/>
+        <path class="rb-line rb-edge" stroke-width="17" d="M264 52 C350 66 448 40 470 130 C484 190 456 240 472 318"/>
+        <path class="rb-line" style="stroke:var(--ribbon)" stroke-width="12" d="M264 52 C350 66 448 40 470 130 C484 190 456 240 472 318"/>
+        <path class="rb-fill rb-edge" stroke-width="3" stroke-linejoin="round" d="M244 50 C214 14 172 10 168 34 C165 58 214 62 244 53 Z"/>
+        <path class="rb-fill rb-edge" stroke-width="3" stroke-linejoin="round" d="M256 50 C286 14 328 10 332 34 C335 58 286 62 256 53 Z"/>
+        <rect class="rb-fill rb-edge" stroke-width="3" x="238" y="36" width="24" height="26" rx="9"/>
+      </g>
+    </svg>
+    <p class="eyebrow">Please join us<br>for a very thankful</p>
+    <h1 class="title"><span>FRIENDS</span><span class="script">Giving!</span></h1>
+  </header>
+
+  <div class="body">
+    <div class="date" role="group" aria-label="Thursday, 26 November 2026">
+      <span class="mo">NOV</span><span class="ln"></span><span class="dy">26</span><span class="ln"></span><span class="yr">2026</span>
+    </div>
+    <p class="dow">Thursday</p>
+
+    <div class="rule">Add your dishes</div>
+
+    <section id="note" class="note" hidden></section>
+
+    <section id="mine" class="mine" hidden>
+      <p>You’re signed up as <strong id="minename"></strong>. Thanks for bringing something!</p>
+      <button type="button" class="linkbtn" id="editmine">Edit my dishes</button>
+    </section>
+
+    <form id="form" novalidate autocomplete="off">
+      <div id="editbar" class="editbar">
+        <span id="editlabel"></span>
+        <span class="acts"><button type="button" class="linkbtn" id="cancel">Cancel</button></span>
+      </div>
+
+      <div class="field">
+        <label class="step" for="name">Who are you?</label>
+        <select class="input select" id="name"></select>
+      </div>
+
+      <div class="field">
+        <span class="step">What are you bringing?</span>
+        <div id="rows"></div>
+        <button type="button" class="linkbtn addbtn" id="add">+ Add another dish</button>
+      </div>
+
+      <button type="submit" class="go" id="go" disabled>Loading…</button>
+    </form>
+
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+
+    <section id="listsec">
+      <div class="rule">What’s already coming</div>
+      <div class="summary" id="summary"></div>
+      <div class="menucard">
+        <h2 class="mtitle">The Menu</h2>
+        <div class="orn" aria-hidden="true">✦</div>
+        <ul class="groups" id="groups"></ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  // Paste the web app URL from Google Apps Script between the quotes (it ends in /exec).
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2JfS1DQPDQsm0cPQSVO-isntm0x5u0ohdgvpkt65_P2OvzyEWPPQtjgORgs6FszJ1/exec';
+
+  var REFRESH_MS = 30000;
+  var NAMES = ['Loly', 'Ben', 'Ester', 'Diego', 'Sara', 'Jerry', 'Irene', 'Lulu'];
+  var CATS = ['Main dish', 'Side dish', 'Snack', 'Dessert', 'Drink', 'Other'];
+  var CAT_PLURAL = {
+    'Main dish': 'Main dishes', 'Side dish': 'Side dishes', 'Snack': 'Snacks',
+    'Dessert': 'Desserts', 'Drink': 'Drinks', 'Other': 'Other'
+  };
+  var MAX_ITEMS = 8;
+  // Dietary tags (vegan and vegetarian exclude each other)
+  var DIETS = [
+    { key: 'vegan', label: 'Vegan' },
+    { key: 'vegetarian', label: 'Vegetarian' },
+    { key: 'gf', label: 'Gluten-free' }
+  ];
+  var DIET_LABEL = {};
+  DIETS.forEach(function (d) { DIET_LABEL[d.key] = d.label; });
+
+  var ME_KEY = 'fg-potluck-me';
+  var configured = /^https:\/\/script\.google\.com\/.+\/exec/.test(SCRIPT_URL);
+
+  var $ = function (id) { return document.getElementById(id); };
+  var keyOf = function (n) { return String(n).toLowerCase(); };
+  var blankRow = function () { return { dish: '', category: '', diet: [] }; };
+
+  var state = {
+    entries: {},       // key -> {name, items:[{dish,category,diet}]}
+    loaded: false,
+    failed: false,
+    name: '',
+    rows: [blankRow()],
+    editing: false,
+    busy: false,
+    lastWrite: 0,
+    me: null           // {name, token}: who signed up from this browser
+  };
+
+  /* ---------- small helpers ---------- */
+  function showMsg(text, isErr) {
+    var m = $('msg');
+    m.textContent = text || '';
+    m.className = 'msg' + (isErr ? ' err' : '');
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function newToken() {
+    var a = new Uint8Array(12);
+    (window.crypto || window.msCrypto).getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+  }
+  function readMe() {
+    try {
+      var v = JSON.parse(localStorage.getItem(ME_KEY) || 'null');
+      if (v && typeof v.name === 'string' && typeof v.token === 'string') return v;
+    } catch (e) { /* storage unavailable */ }
+    return null;
+  }
+  function setMe(v) {
+    state.me = v;
+    try {
+      if (v) localStorage.setItem(ME_KEY, JSON.stringify(v));
+      else localStorage.removeItem(ME_KEY);
+    } catch (e) { /* storage unavailable: it still works for this visit */ }
+  }
+  function api(params) {
+    var qs = Object.keys(params).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    }).join('&');
+    return fetch(SCRIPT_URL + '?' + qs, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error('http');
+      return r.json();
+    });
+  }
+
+  /* ---------- data from the sheet ---------- */
+  function cleanEntries(list) {
+    var m = {};
+    (Array.isArray(list) ? list : []).forEach(function (e) {
+      if (!e || typeof e.name !== 'string' || !Array.isArray(e.items)) return;
+      var items = [];
+      e.items.slice(0, MAX_ITEMS).forEach(function (it) {
+        if (!it || typeof it.dish !== 'string' || !it.dish.trim()) return;
+        items.push({
+          dish: it.dish.slice(0, 80),
+          category: CATS.indexOf(it.category) >= 0 ? it.category : 'Other',
+          diet: DIETS.map(function (d) { return d.key; }).filter(function (k) {
+            return Array.isArray(it.diet) && it.diet.indexOf(k) >= 0;
+          })
+        });
+      });
+      if (items.length) m[keyOf(e.name)] = { name: e.name, items: items };
+    });
+    return m;
+  }
+
+  function refresh() {
+    if (!configured || state.busy) return Promise.resolve();
+    return api({ action: 'list' }).then(function (res) {
+      if (!res || !res.ok) throw new Error('bad');
+      state.entries = cleanEntries(res.entries);
+      state.loaded = true;
+      state.failed = false;
+      // if the host removed my entry from the sheet, let me sign up again
+      if (state.me && !state.entries[keyOf(state.me.name)] && Date.now() - state.lastWrite > 20000) {
+        setMe(null);
+        if (state.editing) resetForm();
+      }
+      renderNameSelect();
+      renderMenu();
+      renderForm();
+    }).catch(function () {
+      state.failed = true;
+      renderMenu();
+      renderForm();
+    });
+  }
+
+  /* ---------- rendering ---------- */
+  function renderNameSelect() {
+    var sel = $('name');
+    sel.textContent = '';
+    var ph = el('option', null, 'Choose your name');
+    ph.value = '';
+    sel.appendChild(ph);
+    NAMES.forEach(function (n) {
+      var taken = !!state.entries[keyOf(n)];
+      var mineOpt = state.editing && state.name === n;
+      var o = el('option', null, taken && !mineOpt ? n + ' (already signed up)' : n);
+      o.value = n;
+      if (taken && !mineOpt) o.disabled = true;
+      sel.appendChild(o);
+    });
+    sel.value = state.name;
+    sel.disabled = state.editing;
+  }
+
+  function renderRows(focusLast) {
+    var wrap = $('rows');
+    wrap.textContent = '';
+    state.rows.forEach(function (r, i) {
+      var item = el('div', 'item');
+
+      var inp = el('input', 'input');
+      inp.type = 'text';
+      inp.maxLength = 80;
+      inp.placeholder = i === 0 ? 'Pumpkin pie, garlic mashed potatoes…' : 'Another thing you’re bringing';
+      inp.value = r.dish;
+      inp.setAttribute('aria-label', 'Dish ' + (i + 1));
+      inp.addEventListener('input', function () { r.dish = inp.value; });
+      item.appendChild(inp);
+
+      var line = el('div', 'itemline');
+      var sel = el('select', 'input select');
+      sel.setAttribute('aria-label', 'Kind of dish for dish ' + (i + 1));
+      var ph = el('option', null, 'Kind of dish');
+      ph.value = '';
+      sel.appendChild(ph);
+      CATS.forEach(function (c) {
+        var o = el('option', null, c);
+        o.value = c;
+        sel.appendChild(o);
+      });
+      sel.value = r.category;
+      sel.addEventListener('change', function () { r.category = sel.value; });
+      line.appendChild(sel);
+
+      if (state.rows.length > 1) {
+        var rm = el('button', 'linkbtn', 'Remove');
+        rm.type = 'button';
+        rm.setAttribute('aria-label', 'Remove dish ' + (i + 1));
+        rm.addEventListener('click', function () {
+          state.rows.splice(i, 1);
+          renderRows();
+        });
+        line.appendChild(rm);
+      }
+      item.appendChild(line);
+
+      if (!r.diet) r.diet = [];
+      var dwrap = el('div', 'diets');
+      dwrap.appendChild(el('span', 'dlabel', 'Dietary (optional):'));
+      var dbtns = [];
+      var dchips = el('div', 'dchips');
+      dwrap.appendChild(dchips);
+      var paintDiets = function () {
+        dbtns.forEach(function (x) {
+          var on = r.diet.indexOf(x.key) >= 0;
+          x.btn.classList.toggle('on', on);
+          x.btn.setAttribute('aria-pressed', String(on));
+        });
+      };
+      DIETS.forEach(function (d) {
+        var b = el('button', 'dtag dtag-' + d.key, d.label);
+        b.type = 'button';
+        b.addEventListener('click', function () {
+          var has = r.diet.indexOf(d.key) >= 0;
+          var next = r.diet.filter(function (x) { return x !== d.key; });
+          if (!has) {
+            next.push(d.key);
+            if (d.key === 'vegan') next = next.filter(function (x) { return x !== 'vegetarian'; });
+            if (d.key === 'vegetarian') next = next.filter(function (x) { return x !== 'vegan'; });
+          }
+          r.diet = next;
+          paintDiets();
+        });
+        dbtns.push({ key: d.key, btn: b });
+        dchips.appendChild(b);
+      });
+      paintDiets();
+      item.appendChild(dwrap);
+      wrap.appendChild(item);
+    });
+    $('add').hidden = state.rows.length >= MAX_ITEMS;
+    if (focusLast) {
+      var inputs = wrap.querySelectorAll('input');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    }
+  }
+
+  function renderMenu() {
+    var groups = $('groups');
+    var summary = $('summary');
+    groups.textContent = '';
+    summary.textContent = '';
+
+    if (!configured) {
+      groups.appendChild(el('li', 'empty', 'The menu will appear here once the page is connected to its sheet.'));
+      return;
+    }
+    if (!state.loaded) {
+      groups.appendChild(el('li', 'empty', state.failed
+        ? 'Couldn’t load the menu. Check your connection and refresh the page.'
+        : 'Loading the menu…'));
+      return;
+    }
+
+    var list = Object.keys(state.entries).map(function (k) { return state.entries[k]; })
+      .sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var dishes = [];
+    list.forEach(function (e) {
+      e.items.forEach(function (it) { dishes.push({ dish: it.dish, category: it.category, diet: it.diet || [], name: e.name }); });
+    });
+
+    summary.appendChild(el('p', null, list.length + ' of ' + NAMES.length + ' friends have signed up.'));
+    var p = el('p');
+    p.appendChild(document.createTextNode('You can choose from: '));
+    p.appendChild(el('span', 'need', 'a main dish, a side, a snack, dessert, drinks, or anything else'));
+    p.appendChild(document.createTextNode('.'));
+    summary.appendChild(p);
+
+    if (!dishes.length) {
+      groups.appendChild(el('li', 'empty', 'Nothing on the menu yet. Be the first!'));
+    }
+
+    CATS.forEach(function (c) {
+      var inCat = dishes.filter(function (d) { return d.category === c; })
+        .sort(function (a, b) { return a.dish.localeCompare(b.dish); });
+      if (!inCat.length) return;
+      var li = el('li', 'group');
+      var h = el('h3', 'gh');
+      h.appendChild(document.createTextNode(CAT_PLURAL[c] || c));
+      li.appendChild(h);
+      var ul = el('ul', 'dishes');
+      inCat.forEach(function (d) {
+        var r = el('li', 'dishrow');
+        var line = el('div', 'dline');
+        line.appendChild(el('span', 'dish', d.dish));
+        line.appendChild(el('span', 'leader'));
+        line.appendChild(el('span', 'by', d.name));
+        r.appendChild(line);
+        if (d.diet.length) {
+          var tg = el('div', 'tags');
+          d.diet.forEach(function (k) { tg.appendChild(el('span', 'tg tg-' + k, DIET_LABEL[k])); });
+          r.appendChild(tg);
+        }
+        ul.appendChild(r);
+      });
+      li.appendChild(ul);
+      groups.appendChild(li);
+    });
+  }
+
+  function renderForm() {
+    var form = $('form');
+    var note = $('note');
+    var go = $('go');
+
+    // someone who already signed up from this browser sees a "you're signed up" panel instead of the form
+    var mineName = (configured && state.loaded && state.me && state.entries[keyOf(state.me.name)] && !state.editing)
+      ? state.entries[keyOf(state.me.name)].name : '';
+    $('mine').hidden = !mineName;
+    $('minename').textContent = mineName;
+    form.hidden = !configured || !!mineName;
+
+    if (!configured) {
+      note.hidden = false;
+      note.textContent = 'This page isn’t connected to its Google Sheet yet.';
+    } else if (state.failed && !state.loaded) {
+      note.hidden = false;
+      note.textContent = 'Couldn’t reach the sign-up sheet. Check your connection and refresh the page.';
+    } else {
+      note.hidden = true;
+    }
+
+    $('editbar').classList.toggle('show', state.editing);
+    if (state.editing) $('editlabel').textContent = 'Editing ' + state.name + '’s dishes';
+
+    if (state.busy) {
+      go.disabled = true; go.textContent = 'Saving…';
+    } else if (!state.loaded) {
+      go.disabled = true; go.textContent = state.failed ? 'Can’t connect' : 'Loading…';
+    } else {
+      go.disabled = false;
+      go.textContent = state.editing ? 'Save changes' : 'Count me in';
+    }
+  }
+
+  function renderAll() {
+    renderNameSelect();
+    renderRows();
+    renderMenu();
+    renderForm();
+  }
+
+  /* ---------- actions ---------- */
+  function resetForm() {
+    state.name = '';
+    state.rows = [blankRow()];
+    state.editing = false;
+  }
+
+  function startEdit() {
+    if (!state.me) return;
+    var e = state.entries[keyOf(state.me.name)];
+    if (!e) return;
+    state.editing = true;
+    state.name = e.name;
+    state.rows = e.items.map(function (it) { return { dish: it.dish, category: it.category, diet: (it.diet || []).slice() }; });
+    showMsg('');
+    renderAll();
+    $('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function errorText(code) {
+    if (code === 'taken') return 'That name was just taken. Choose another one.';
+    if (code === 'token') return 'This entry was made from another device, so it can only be changed by the host in the sheet.';
+    if (code === 'missing') return 'That entry is no longer in the sheet. Refresh and sign up again.';
+    return 'Couldn’t save that. Please try again.';
+  }
+
+  async function submit(ev) {
+    ev.preventDefault();
+    if (state.busy || !configured || !state.loaded) return;
+
+    var name = state.name;
+    if (!name) return showMsg('Choose your name first.', true);
+
+    var items = [];
+    for (var i = 0; i < state.rows.length; i++) {
+      var r = state.rows[i];
+      var dish = r.dish.trim();
+      if (!dish && !r.category) continue;
+      if (!dish) return showMsg('Add a name for dish ' + (i + 1) + ', or remove it.', true);
+      if (!r.category) return showMsg('Choose a kind of dish for “' + dish + '”.', true);
+      items.push({ dish: dish, category: r.category, diet: (r.diet || []).slice() });
+    }
+    if (!items.length) return showMsg('Tell us what you’re bringing.', true);
+
+    if (!state.editing && state.entries[keyOf(name)]) {
+      state.name = '';
+      renderNameSelect();
+      return showMsg(name + ' has already signed up.', true);
+    }
+
+    state.busy = true;
+    renderForm();
+    showMsg('');
+    try {
+      var res, token;
+      if (state.editing) {
+        res = await api({ action: 'update', name: name, token: state.me ? state.me.token : '', items: JSON.stringify(items) });
+      } else {
+        token = newToken();
+        res = await api({ action: 'add', name: name, token: token, items: JSON.stringify(items) });
+      }
+      if (res && res.ok) {
+        if (!state.editing) setMe({ name: name, token: token });
+        var wasEditing = state.editing;
+        state.entries[keyOf(name)] = { name: name, items: items };
+        state.lastWrite = Date.now();
+        resetForm();
+        showMsg(wasEditing ? 'Saved!' : 'You’re in, ' + name + '! See you at the table.');
+      } else {
+        var code = res && res.error;
+        if (code === 'taken') state.name = '';
+        showMsg(errorText(code), true);
+      }
+    } catch (err) {
+      showMsg('Couldn’t reach the sign-up sheet. Check your connection and try again.', true);
+    } finally {
+      state.busy = false;
+      renderAll();
+      refresh();
+    }
+  }
+
+  /* ---------- startup ---------- */
+  $('form').addEventListener('submit', submit);
+  $('name').addEventListener('change', function () { state.name = $('name').value; showMsg(''); });
+  $('add').addEventListener('click', function () {
+    if (state.rows.length >= MAX_ITEMS) return;
+    state.rows.push(blankRow());
+    renderRows(true);
+  });
+  $('editmine').addEventListener('click', startEdit);
+  $('cancel').addEventListener('click', function () { resetForm(); showMsg(''); renderAll(); });
+
+  state.me = readMe();
+  renderAll();
+  refresh();
+  setInterval(function () { if (!document.hidden && !state.editing) refresh(); }, REFRESH_MS);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(); });
+})();
+</script>
+</body>
+</html>
